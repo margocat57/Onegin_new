@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include "structures_consts.h"
 
 file_in_array read_file_to_string_array(const char *name_of_file)
@@ -14,13 +15,16 @@ file_in_array read_file_to_string_array(const char *name_of_file)
     assert(fptr != NULL);
 
     struct stat file_info;
-    stat(name_of_file, &file_info);
-    // TODO проверить функцию стата, чтобы считала
+    if (stat(name_of_file, &file_info) == -1)
+    {
+        perror("Stat error");
+        fprintf(stderr, "Error code: %d\n", errno);
+        exit(EXIT_FAILURE);
+    }
 
     char *all_strings_in_file = (char *)calloc(file_info.st_size + 1, sizeof(char));
     assert(all_strings_in_file != NULL);
     fread(all_strings_in_file, sizeof(char), file_info.st_size, fptr);
-    // проверить что стат = фрид
 
     char *search_ptr = all_strings_in_file;
 

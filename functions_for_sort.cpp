@@ -6,9 +6,6 @@
 #include "structures_consts.h"
 #include "swap_func.h"
 
-// очень важная проблема - после \n мы получаем адрес всей строчки до \0,
-// а этого нам не хочется ведь нам хочется получить адрес строчки только до следующего \n
-
 ptr_array_and_size_of_strings *create_ptr_array(file_in_array *arr)
 {
     assert(arr != NULL);
@@ -32,13 +29,13 @@ ptr_array_and_size_of_strings *create_ptr_array(file_in_array *arr)
     return arr_with_ptr_sz;
 }
 
-int compare_address(const void *a, const void *b)
+int compare_address(const void *ptr1, const void *ptr2)
 {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(ptr1 != NULL);
+    assert(ptr2 != NULL);
 
-    const ptr_array_and_size_of_strings *adress1 = (ptr_array_and_size_of_strings *)a;
-    const ptr_array_and_size_of_strings *adress2 = (ptr_array_and_size_of_strings *)b;
+    const ptr_array_and_size_of_strings *adress1 = (ptr_array_and_size_of_strings *)ptr1;
+    const ptr_array_and_size_of_strings *adress2 = (ptr_array_and_size_of_strings *)ptr2;
 
     if (adress1->ptr > adress2->ptr)
         return 1;
@@ -52,7 +49,7 @@ char my_tolower(char ch)
     return ('A' <= ch && ch <= 'Z') ? ch + 'a' - 'A' - 1 : ch;
 }
 
-bool is_letter(char ch)
+bool my_isalpha(char ch)
 {
     return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
@@ -68,9 +65,9 @@ int compare_strings_reverse(const char *str1, const char *str2)
     char char1 = '\0';
     char char2 = '\0';
 
-    while (idx1 >= 0 && !is_letter(str1[idx1]))
+    while (idx1 >= 0 && !my_isalpha(str1[idx1]))
         idx1--;
-    while (idx2 >= 0 && !is_letter(str2[idx2]))
+    while (idx2 >= 0 && !my_isalpha(str2[idx2]))
         idx2--;
 
     while (idx1 >= 0 && idx2 >= 0)
@@ -102,9 +99,9 @@ int compare_strings_from_beginning(const char *str1, const char *str2)
     char char1 = '\0';
     char char2 = '\0';
 
-    while (idx1 <= len1 && !is_letter(str1[idx1]))
+    while (idx1 <= len1 && !my_isalpha(str1[idx1]))
         idx1++;
-    while (idx2 <= len2 && !is_letter(str2[idx2]))
+    while (idx2 <= len2 && !my_isalpha(str2[idx2]))
         idx2++;
 
     while (idx1 <= len1 - 1 && idx2 <= len2 - 1)

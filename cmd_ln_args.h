@@ -15,6 +15,6 @@ char **PTR_FILE_NM = &FILE_NAME;
 //! @note Does not validate if the file actually exists or is accessible
 //!
 //! @warning Function uses assert for all pointers
-void where_put_sorted_onegin(int argc, char **argv, char **ptrfile_to_put_results);
+void where_put_sorted_onegin(int argc, const char *const *const argv, char **ptrfile_to_put_results);
 
 #endif // CMD_LN_ARGS_H

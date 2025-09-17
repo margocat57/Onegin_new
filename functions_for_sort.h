@@ -21,9 +21,9 @@ ptr_array_and_size_of_strings *create_ptr_array(file_in_array *arr);
 char my_tolower(char ch);
 
 //! @warning Function uses assert for all pointers
-int compare_address(const void *a, const void *b);
+int compare_address(const void *ptr1, const void *ptr2);
 
-bool is_letter(char ch);
+bool my_isalpha(char ch);
 
 //! @brief Compares two strings in reverse lexicographical order
 //!
@@ -69,6 +69,7 @@ int compare_strings_from_beginning(const char *str1, const char *str2);
 //! @warning Function uses assert for all pointers
 void sort_array_set_by_ptr2arr(ptr_array_and_size_of_strings *arr, const size_t *strings, int (*how_to_compare)(const char *, const char *));
 
+//! Function to call calloc functions to free memory used by array of pointers and buffer with text
 void free_memory(ptr_array_and_size_of_strings *arr, file_in_array *array_for_size);
 
 #endif // PTR_FUNC2_5_H

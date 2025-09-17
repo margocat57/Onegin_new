@@ -19,6 +19,8 @@
 //!
 //! @note Allocated memory must be freed by the caller
 //! @warning Function uses assert for pointer name_of_file
+//! @warning Function checks file status using fstat to get file size in bytes.
+//!          If fstat fails, error message is printed to stderr and program exit with EXIT_FAILURE
 file_in_array read_file_to_string_array(const char *name_of_file);
 
 //! Writes sorted Onegin lines to a file in append mode
