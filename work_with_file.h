@@ -21,4 +21,17 @@
 //! @warning Function uses assert for pointer name_of_file
 file_in_array read_file_to_string_array(const char *name_of_file);
 
+//! Writes sorted Onegin lines to a file in append mode
+//!
+//! Appends sorted string array to the specified file using "a+" mode.
+//!
+//! The function preserves existing null terminators in strings and
+//! adds newline characters at the end of each line.
+//!
+//! @note Skips empty strings (starting with '\0' or '\n')
+//! @note Adds an extra newline at the end for separation
+//!
+//! @warning Function uses assert for all pointers
+void put_sorted_onegin_to_file(const char *name_of_file, ptr_array_and_size_of_strings *arr, const size_t *amount_str);
+
 #endif // WORK_WITH_FILE_H
