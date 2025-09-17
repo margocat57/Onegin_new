@@ -40,7 +40,7 @@ Clean build files:
 make clean
 ```
 
-##MEOW
+#MEOW
 
 ![Cat from home](cat.png)
 
