@@ -22,7 +22,7 @@ An intriguing extension of this concept involves developing a text generator cap
 First, copy the project:
 
 ```bash
-git clone https://github.com/your-username/eugene-onegin-sorter.git
+git clone git clone  https://github.com/margocat57/Onegin_new.git
 ```
 
 Build the project:
