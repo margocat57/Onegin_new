@@ -136,7 +136,6 @@ void sort_array_set_by_ptr2arr(ptr_array_and_size_of_strings *arr, const size_t 
             if (how_to_compare((const char *)arr[string].ptr,
                                (const char *)arr[string + 1].ptr) > 0)
             {
-                // не работает эта функция и выкидывает из сортировки раньше
                 swap_structures(&arr[string], &arr[string + 1]);
                 is_elem_to_sort = 1;
             }
