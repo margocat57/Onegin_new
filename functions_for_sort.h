@@ -25,6 +25,9 @@ int compare_address(const void *ptr1, const void *ptr2);
 
 bool my_isalpha(char ch);
 
+//! Find first letter in reverse lexicographical order comparison
+void find_first_letter_from_end(int *idx, const char *str);
+
 //! @brief Compares two strings in reverse lexicographical order
 //!
 //! Compares strings from end to start using letter-by-letter comparison.
@@ -39,6 +42,9 @@ bool my_isalpha(char ch);
 //!
 //! @warning Function uses assert for all pointers
 int compare_strings_reverse(const char *str1, const char *str2);
+
+//! Find first letter in lexicographical order comparison
+void find_first_letter_from_beginning(int *idx, int len_str, const char *str);
 
 //! @brief Compares two strings in lexicographical order
 //!

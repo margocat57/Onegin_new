@@ -54,6 +54,15 @@ bool my_isalpha(char ch)
     return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 
+void find_first_letter_from_end(int *idx, const char *str)
+{
+    MY_ASSERT_WTHOUT_NDEBUG(idx != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(str != NULL);
+
+    while (*idx >= 0 && !my_isalpha(str[*idx]))
+        (*idx)--;
+}
+
 int compare_strings_reverse(const char *str1, const char *str2)
 {
     MY_ASSERT_WTHOUT_NDEBUG(str1 != NULL);
@@ -65,10 +74,8 @@ int compare_strings_reverse(const char *str1, const char *str2)
     char char1 = '\0';
     char char2 = '\0';
 
-    while (idx1 >= 0 && !my_isalpha(str1[idx1]))
-        idx1--;
-    while (idx2 >= 0 && !my_isalpha(str2[idx2]))
-        idx2--;
+    find_first_letter_from_end(&idx1, str1);
+    find_first_letter_from_end(&idx2, str2);
 
     while (idx1 >= 0 && idx2 >= 0)
     {
@@ -85,6 +92,15 @@ int compare_strings_reverse(const char *str1, const char *str2)
     return idx1 - idx2;
 }
 
+void find_first_letter_from_beginning(int *idx, int len_str, const char *str)
+{
+    MY_ASSERT_WTHOUT_NDEBUG(idx != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(str != NULL);
+
+    while (*idx <= len_str && !my_isalpha(str[*idx]))
+        (*idx)++;
+}
+
 int compare_strings_from_beginning(const char *str1, const char *str2)
 {
     MY_ASSERT_WTHOUT_NDEBUG(str1 != NULL);
@@ -99,10 +115,8 @@ int compare_strings_from_beginning(const char *str1, const char *str2)
     char char1 = '\0';
     char char2 = '\0';
 
-    while (idx1 <= len1 && !my_isalpha(str1[idx1]))
-        idx1++;
-    while (idx2 <= len2 && !my_isalpha(str2[idx2]))
-        idx2++;
+    find_first_letter_from_beginning(&idx1, len1, str1);
+    find_first_letter_from_beginning(&idx2, len2, str2);
 
     while (idx1 <= len1 - 1 && idx2 <= len2 - 1)
     {

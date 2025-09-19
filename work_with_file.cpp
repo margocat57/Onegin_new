@@ -92,17 +92,17 @@ void put_buffer_to_file(const char *name_of_file, const file_in_array *arr)
     MY_ASSERT_WTHOUT_NDEBUG(fptr != NULL);
 
     char *search_ptr = arr->all_strings_in_file;
+    const char *null_term = NULL;
 
-    for (int num_of_str = 1; num_of_str <= arr->amount_str; num_of_str++)
+    for (int num_of_str = 0; num_of_str < arr->amount_str; num_of_str++)
     {
         fputs(search_ptr, fptr);
-        if ((search_ptr = strchr(search_ptr, '\0')) != NULL)
+
+        if (num_of_str != arr->amount_str - 1)
         {
             search_ptr += strlen(search_ptr) + 1;
             fputs("\n", fptr);
         }
-        else
-            break;
     }
 
     fputs("\n", fptr);
