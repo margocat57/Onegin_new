@@ -9,6 +9,8 @@
 
 int count_strings_by_symbols(char *array_to_search, char ch)
 {
+    MY_ASSERT_WTHOUT_NDEBUG(array_to_search != NULL);
+
     int count_str = 1;
 
     while ((array_to_search = strchr(array_to_search, ch)) != NULL)
@@ -23,6 +25,9 @@ int count_strings_by_symbols(char *array_to_search, char ch)
 
 bool incorr_work_with_stat(const char *name_of_file, struct stat *all_info_about_file)
 {
+    MY_ASSERT_WTHOUT_NDEBUG(name_of_file != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(all_info_about_file != NULL);
+
     if (stat(name_of_file, all_info_about_file) == -1)
     {
         perror("Stat error");
