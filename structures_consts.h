@@ -16,6 +16,7 @@ struct file_in_array
 {
     size_t amount_str;         //!< quantity of strings
     char *all_strings_in_file; //!< array with all strings of file
+    bool is_stat_err;          //!< is there error in stat function
 };
 
 #endif // STRUCTURES_CONSTS_H

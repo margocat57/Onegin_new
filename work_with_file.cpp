@@ -1,41 +1,59 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include "assert_without_ndebug.h"
 #include "structures_consts.h"
 
-file_in_array read_file_to_string_array(const char *name_of_file)
+int count_strings_by_symbols(char *array_to_search, char ch)
 {
-    assert(name_of_file != NULL);
-    file_in_array fptr_in_array = {};
-    FILE *fptr = fopen(name_of_file, "r");
-    assert(fptr != NULL);
+    int count_str = 1;
 
-    struct stat file_info;
-    if (stat(name_of_file, &file_info) == -1)
+    while ((array_to_search = strchr(array_to_search, ch)) != NULL)
+    {
+        count_str++;
+        *(array_to_search) = '\0';
+        array_to_search++;
+    }
+
+    return count_str;
+}
+
+bool incorr_work_with_stat(const char *name_of_file, struct stat *all_info_about_file)
+{
+    if (stat(name_of_file, all_info_about_file) == -1)
     {
         perror("Stat error");
         fprintf(stderr, "Error code: %d\n", errno);
-        exit(EXIT_FAILURE);
+        return true;
+    }
+    return false;
+}
+
+file_in_array read_file_to_string_array(const char *name_of_file)
+{
+    MY_ASSERT_WTHOUT_NDEBUG(name_of_file != NULL);
+    file_in_array fptr_in_array = {};
+    FILE *fptr = fopen(name_of_file, "r");
+    MY_ASSERT_WTHOUT_NDEBUG(fptr != NULL);
+
+    struct stat file_info = {};
+    fptr_in_array.is_stat_err = incorr_work_with_stat(name_of_file, &(file_info));
+    if (fptr_in_array.is_stat_err)
+    {
+        return fptr_in_array;
     }
 
     char *all_strings_in_file = (char *)calloc(file_info.st_size + 1, sizeof(char));
-    assert(all_strings_in_file != NULL);
-    fread(all_strings_in_file, sizeof(char), file_info.st_size, fptr);
+    MY_ASSERT_WTHOUT_NDEBUG(all_strings_in_file != NULL);
+
+    MY_ASSERT_WTHOUT_NDEBUG(fread(all_strings_in_file, sizeof(char), file_info.st_size, fptr) == file_info.st_size);
 
     char *search_ptr = all_strings_in_file;
 
-    int nmb_of_str = 1;
-
-    while ((search_ptr = strchr(search_ptr, '\n')) != NULL)
-    {
-        nmb_of_str++;
-        *(search_ptr) = '\0';
-        search_ptr++;
-    }
+    int nmb_of_str = count_strings_by_symbols(search_ptr, '\n');
 
     fptr_in_array.amount_str = nmb_of_str;
     fptr_in_array.all_strings_in_file = all_strings_in_file;
@@ -46,11 +64,12 @@ file_in_array read_file_to_string_array(const char *name_of_file)
 
 void put_sorted_onegin_to_file(const char *name_of_file, ptr_array_and_size_of_strings *arr, const size_t *amount_str)
 {
-    assert(arr != NULL);
-    assert(name_of_file != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(arr != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(name_of_file != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(amount_str != NULL);
 
     FILE *fptr = fopen(name_of_file, "a+");
-    assert(fptr != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(fptr != NULL);
 
     for (int string = 0; string < *amount_str; string++)
     {
@@ -63,4 +82,31 @@ void put_sorted_onegin_to_file(const char *name_of_file, ptr_array_and_size_of_s
     fputs("\n", fptr);
     fclose(fptr);
 }
+
+void put_buffer_to_file(const char *name_of_file, const file_in_array *arr)
+{
+    MY_ASSERT_WTHOUT_NDEBUG(arr != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(name_of_file != NULL);
+
+    FILE *fptr = fopen(name_of_file, "a+");
+    MY_ASSERT_WTHOUT_NDEBUG(fptr != NULL);
+
+    char *search_ptr = arr->all_strings_in_file;
+
+    for (int num_of_str = 1; num_of_str <= arr->amount_str; num_of_str++)
+    {
+        fputs(search_ptr, fptr);
+        if ((search_ptr = strchr(search_ptr, '\0')) != NULL)
+        {
+            search_ptr += strlen(search_ptr) + 1;
+            fputs("\n", fptr);
+        }
+        else
+            break;
+    }
+
+    fputs("\n", fptr);
+    fclose(fptr);
+}
+
 // Функция для проверки что символы не пробельные

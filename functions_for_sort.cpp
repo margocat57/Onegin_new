@@ -2,15 +2,15 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
-#include <assert.h>
+#include "assert_without_ndebug.h"
 #include "structures_consts.h"
 #include "swap_func.h"
 
 ptr_array_and_size_of_strings *create_ptr_array(file_in_array *arr)
 {
-    assert(arr != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(arr != NULL);
     ptr_array_and_size_of_strings *arr_with_ptr_sz = (ptr_array_and_size_of_strings *)calloc(arr->amount_str, sizeof(ptr_array_and_size_of_strings));
-    assert(arr_with_ptr_sz != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(arr_with_ptr_sz != NULL);
 
     size_t num_of_elem = 0;
     (arr_with_ptr_sz[num_of_elem]).ptr = arr->all_strings_in_file;
@@ -31,8 +31,8 @@ ptr_array_and_size_of_strings *create_ptr_array(file_in_array *arr)
 
 int compare_address(const void *ptr1, const void *ptr2)
 {
-    assert(ptr1 != NULL);
-    assert(ptr2 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(ptr1 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(ptr2 != NULL);
 
     const ptr_array_and_size_of_strings *adress1 = (ptr_array_and_size_of_strings *)ptr1;
     const ptr_array_and_size_of_strings *adress2 = (ptr_array_and_size_of_strings *)ptr2;
@@ -56,8 +56,8 @@ bool my_isalpha(char ch)
 
 int compare_strings_reverse(const char *str1, const char *str2)
 {
-    assert(str1 != NULL);
-    assert(str2 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(str1 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(str2 != NULL);
 
     int idx1 = strlen(str1) - 1;
     int idx2 = strlen(str2) - 1;
@@ -87,8 +87,8 @@ int compare_strings_reverse(const char *str1, const char *str2)
 
 int compare_strings_from_beginning(const char *str1, const char *str2)
 {
-    assert(str1 != NULL);
-    assert(str2 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(str1 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(str2 != NULL);
 
     int idx1 = 0;
     int len1 = strlen(str1) - 1;
@@ -121,21 +121,24 @@ int compare_strings_from_beginning(const char *str1, const char *str2)
 
 void sort_array_set_by_ptr2arr(ptr_array_and_size_of_strings *arr, const size_t *strings, int (*how_to_compare)(const char *, const char *))
 {
-    assert(arr != NULL);
-    assert(strings != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(arr != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(strings != NULL);
 
     int left = 0, right = *strings - 1;
+    bool is_elem_to_sort = 1;
 
-    while (left < right)
+    while (left < right && is_elem_to_sort)
     {
+        is_elem_to_sort = 0;
 
         for (int string = left; string < right; string++)
         {
             if (how_to_compare((const char *)arr[string].ptr,
                                (const char *)arr[string + 1].ptr) > 0)
             {
-                swap_pointers(&arr[string].ptr, &arr[string + 1].ptr);
-                swap_size(&arr[string].str_size, &arr[string + 1].str_size);
+                // не работает эта функция и выкидывает из сортировки раньше
+                swap_structures(&arr[string], &arr[string + 1]);
+                is_elem_to_sort = 1;
             }
         }
         right--;
@@ -145,8 +148,8 @@ void sort_array_set_by_ptr2arr(ptr_array_and_size_of_strings *arr, const size_t 
             if (how_to_compare((const char *)arr[string - 1].ptr,
                                (const char *)arr[string].ptr) > 0)
             {
-                swap_pointers(&arr[string - 1].ptr, &arr[string].ptr);
-                swap_size(&arr[string - 1].str_size, &arr[string].str_size);
+                swap_structures(&arr[string - 1], &arr[string]);
+                is_elem_to_sort = 1;
             }
         }
         left++;
@@ -155,8 +158,8 @@ void sort_array_set_by_ptr2arr(ptr_array_and_size_of_strings *arr, const size_t 
 
 void free_memory(ptr_array_and_size_of_strings *arr, file_in_array *array_for_size)
 {
-    assert(arr != NULL);
-    assert(array_for_size != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(arr != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(array_for_size != NULL);
 
     free(arr);
     free(array_for_size->all_strings_in_file);

@@ -1,25 +1,13 @@
 #include <stdlib.h>
-#include <assert.h>
+#include "assert_without_ndebug.h"
+#include "structures_consts.h"
 
-void swap_size(size_t *size1, size_t *size2)
+void swap_structures(ptr_array_and_size_of_strings *struct1, ptr_array_and_size_of_strings *struct2)
 {
-    assert(size1 != NULL);
-    assert(size2 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(struct1 != NULL);
+    MY_ASSERT_WTHOUT_NDEBUG(struct2 != NULL);
 
-    size_t temp_size = *size1;
-    *size1 = *size2;
-    *size2 = temp_size;
-}
-
-void swap_pointers(char **str1, char **str2)
-{
-    assert(str1 != NULL);
-    assert(*str1 != NULL);
-
-    assert(str2 != NULL);
-    assert(*str2 != NULL);
-
-    char *temp = *str1;
-    *str1 = *str2;
-    *str2 = temp;
+    ptr_array_and_size_of_strings temp = *struct1;
+    *struct1 = *struct2;
+    *struct2 = temp;
 }
